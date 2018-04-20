@@ -129,7 +129,7 @@ class StudentStore {
 
   makeChoice(classId){
     let choice = {
-      classId:classId,
+      courseId:classId,
       userId:this.userId
     };
     return axios.post(`/choice`,JSON.stringify(choice)).catch(err=>{
