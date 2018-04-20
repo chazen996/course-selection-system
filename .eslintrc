@@ -1,0 +1,6 @@
+{
+  "extends": "umi",
+  "rules": {
+    "no-script-url": 0
+  }
+}
