@@ -62,7 +62,7 @@ ReactDom.render((
           <Route path='/login' component={LoginPage}/>
           <AuthRoute path='/student' component={StudentPage}/>
           <AuthRoute path='/teacher' component={TeacherPage}/>
-          <Route path='/admin' component={AdminPage}/>
+          <AuthRoute path='/admin' component={AdminPage}/>
         </div>
       </BrowserRouter>
     </LocaleProvider>
