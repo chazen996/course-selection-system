@@ -30,6 +30,18 @@ class AdminStore{
 
   @observable courses = [];
 
+  @observable showCreateStudentModal = false;
+
+  @observable showCreateTeacherModal = false;
+
+  @computed get getShowCreateTeacherModal(){
+    return this.showCreateTeacherModal;
+  }
+
+  @computed get getShowCreateStudentModal(){
+    return this.showCreateStudentModal;
+  }
+
   @computed get getStudentNumber(){
     return this.studentNumber;
   }
@@ -80,6 +92,14 @@ class AdminStore{
 
   @computed get getStudents(){
     return this.students;
+  }
+
+  @action setShowCreateTeacherModal(status){
+    this.showCreateTeacherModal = status;
+  }
+
+  @action setShowCreateStudentModal(status){
+    this.showCreateStudentModal = status;
   }
 
   @action setStudentNumber(number){
@@ -207,6 +227,12 @@ class AdminStore{
 
   deleteChoice(choiceId){
     return axios.delete(`/choice/${choiceId}`).catch(err=>{
+      console.log(err);
+    });
+  }
+
+  addPerson(student){
+    return axios.post(`/person`,JSON.stringify(student)).catch(err=>{
       console.log(err);
     });
   }

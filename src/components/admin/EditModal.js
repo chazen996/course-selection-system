@@ -144,17 +144,17 @@ class EditModal extends Component{
                 rules: [{ required: true, message: '请输入工号！'}],
                 initialValue:targetTeacher.number
               })(
-                <Input placeholder="请输入学号" disabled/>
+                <Input placeholder="请输入工号" disabled/>
               )}
             </FormItem>
             <FormItem
               label="简介"
               hasFeedback>
               {getFieldDecorator('teacherIntroduction', {
-                rules: [{ required: true, message: '请输入学生简介！'}],
+                rules: [{ required: true, message: '请输入教师简介！'}],
                 initialValue:targetTeacher.introduction
               })(
-                <Input placeholder="请输入学生简介"/>
+                <Input placeholder="请输入教师简介"/>
               )}
             </FormItem>
             <FormItem

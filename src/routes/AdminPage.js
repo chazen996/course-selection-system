@@ -4,6 +4,8 @@ import PublicAuthKit from "../utils/PublicAuthKit";
 import {observer} from 'mobx-react';
 import AdminStore from "../stores/AdminStore";
 import EditModal from "../components/admin/EditModal";
+import CreateTeacherModal from "../components/admin/CreateTeacherModal";
+import CreateStudentModal from "../components/admin/CreateStudentModal";
 
 // import AdminStore from "../stores/AdminStore";
 const TabPane = Tabs.TabPane;
@@ -242,6 +244,8 @@ class AdminPage extends Component{
         width:'100%'
       }}>
         <EditModal/>
+        <CreateTeacherModal/>
+        <CreateStudentModal/>
 
         <div style={{
           height:'100%',
@@ -372,6 +376,11 @@ class AdminPage extends Component{
                     </FormItem>
                   </Form>
                 </div>
+                <div style={{height:34}}>
+                  <Button type='primary' style={{marginLeft:8}} size='small' onClick={()=>{
+                    AdminStore.setShowCreateStudentModal(true);
+                  }}>增加学生</Button>
+                </div>
                 <Table dataSource={students} columns={studentsColumn} />
               </div>
             </TabPane>
@@ -444,6 +453,11 @@ class AdminPage extends Component{
                       }}>清空</Button>
                     </FormItem>
                   </Form>
+                </div>
+                <div style={{height:34}}>
+                  <Button type='primary' style={{marginLeft:8}} size='small' onClick={()=>{
+                    AdminStore.setShowCreateTeacherModal(true);
+                  }}>增加教师</Button>
                 </div>
                 <Table dataSource={teachers} columns={teachersColumn} />
               </div>
