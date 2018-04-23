@@ -2,6 +2,7 @@ import {Component} from 'react'
 import {Modal,Form,Input,DatePicker,InputNumber,message} from 'antd';
 import TeacherStore from "../../stores/TeacherStore";
 import {observer} from 'mobx-react';
+import PublicAuthKit from '../../utils/PublicAuthKit';
 
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
@@ -9,7 +10,6 @@ const RangePicker = DatePicker.RangePicker;
 class CreateCourseModal extends Component{
   render(){
     const { getFieldDecorator } = this.props.form;
-
     return (
       <Modal
         title="发布课程"
@@ -32,6 +32,7 @@ class CreateCourseModal extends Component{
               course.endTime = values.startAndEndDate[1].format('YYYY-MM-DD HH:mm:ss');
               course.state = 'open';
               course.startAndEndDate = null;
+              course.teacherId = PublicAuthKit.getItem('userId');
               TeacherStore.createCourse(course).then(response=>{
                 if(response){
                   message.success('发布成功');

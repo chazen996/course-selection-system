@@ -146,7 +146,7 @@ class StudentPage extends Component{
               {getFieldDecorator('className', {
                 initialValue:targetClass.name,
               })(
-                <Input placeholder="请输入自定义类型名称" disabled/>
+                <Input placeholder="请输入课程名称" disabled/>
               )}
             </FormItem>
             <FormItem
@@ -154,7 +154,7 @@ class StudentPage extends Component{
               {getFieldDecorator('teacherName', {
                 initialValue:targetClass.person.name,
               })(
-                <Input placeholder="请输入自定义类型名称" disabled/>
+                <Input placeholder="请输入教师名称" disabled/>
               )}
             </FormItem>
             <FormItem
@@ -346,7 +346,7 @@ class StudentPage extends Component{
                       for(let i=0;i<classDataBack.length;i++){
                         let item = classDataBack[i];
                         if(teacherCondition!=null&&teacherCondition!==''){
-                          if(item.person.name.indexOf(teacherCondition)===-1){
+                          if(item.person==null||item.person.name.indexOf(teacherCondition)===-1){
                             flag = false;
                           }
                         }

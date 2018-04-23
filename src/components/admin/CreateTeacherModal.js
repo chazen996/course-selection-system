@@ -30,7 +30,7 @@ class CreateTeacherModal extends Component{
                 let person = {
                   name:values.teacherName,
                   number:values.teacherNumber,
-                  email:values.email,
+                  email:values.teacherEmail,
                   password:values.teacherPassword,
                   introduction:values.teacherIntroduction,
                   type:'teacher'

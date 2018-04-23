@@ -1,5 +1,5 @@
 import {Component} from 'react';
-import {Dropdown,Menu,Tabs,Form,Input,Button,Table,message} from 'antd';
+import {Dropdown,Menu,Tabs,Form,Input,Button,Table,message,Tag} from 'antd';
 import PublicAuthKit from "../utils/PublicAuthKit";
 import {observer} from 'mobx-react';
 import AdminStore from "../stores/AdminStore";
@@ -42,6 +42,14 @@ class AdminPage extends Component{
       }
     });
   }
+
+  generateCourseStatus=(target)=>{
+    if(target.maximumOfStudent>target.currentNum){
+      return '未满';
+    }else{
+      return '已满';
+    }
+  };
 
   generateChoice=(choices,choiceArray)=>{
     let courses =  PublicAuthKit.deepCopy(AdminStore.getCourses);
@@ -196,16 +204,7 @@ class AdminPage extends Component{
     const choices = AdminStore.getChoices;
     const choiceArray = [];
     this.generateChoice(choices,choiceArray);
-    // for(let item of choices){
-    //   let choiceItem ={
-    //     key:item.id,
-    //     studentName:this.studentsMap[item.studentId].name,
-    //     studentNumber:this.studentsMap[item.studentId].number,
-    //     courseName:this.coursesMap[item.courseId].name,
-    //     courseNumber:this.coursesMap[item.courseId].id
-    //   };
-    //   choiceArray.push(choiceItem);
-    // }
+
     const choiceColumn = [{
       title: '学生姓名',
       key: 'studentName',
@@ -233,6 +232,80 @@ class AdminPage extends Component{
     }
     ];
     /* 选课end */
+
+    /* course start */
+    const courseArray = PublicAuthKit.deepCopy(AdminStore.getCourses);
+    for(let item of courseArray){
+      item.key = item.id;
+    }
+
+    const courseColumn = [{
+      title: '任课老师',
+      key: 'person',
+      render:(text,record)=>(
+        <span>{record.person.name}</span>
+      )
+    }, {
+      title: '学科类别',
+      dataIndex: 'type',
+      key: 'type',
+    }, {
+      title: '课程名称',
+      key: 'name',
+      dataIndex:'name'
+    }, {
+      title: '选课人数',
+      key: 'number',
+      render: (text, record) => (
+        <span>{`${record.currentNum}/${record.maximumOfStudent}`}</span>
+      )
+    },{
+      title: '状态',
+      key: 'state',
+      render:(text,record)=> {
+        if(this.generateCourseStatus(record) === '已选'){
+          return <Tag color="#2db7f5">已选</Tag>;
+        }else if(this.generateCourseStatus(record) === '可选'){
+          return <Tag color="#87d068">可选</Tag>;
+        }else if(this.generateCourseStatus(record) === '已满'){
+          return <Tag color="#bfbfbf">已满</Tag>
+        }
+      }
+    }, {
+      title: '操作',
+      key: 'action',
+      render: (text, record) => (
+        <div>
+          <a href='javascript:void(0)' style={{marginRight:15}} onClick={()=>{
+            AdminStore.setTargetCourse(record);
+            AdminStore.setShowEditModl('course');
+          }}>编辑</a>
+          <a href='javascript:void(0)' onClick={()=>{
+            AdminStore.deleteCourse(record.id).then(response=>{
+              if(response){
+                message.success('删除成功');
+                AdminStore.loadData();
+              }else{
+                message.error('网络错误，请稍后再试');
+              }
+            })
+          }}>删除</a>
+        </div>
+        // this.generateCourseStatus(record)!=='可选'?(
+        //   <span style={{
+        //     color: 'rgba(0,0,0,0.45)',
+        //     cursor:'not-allowed'
+        //   }}>选课</span>
+        // ):(
+        //   <span style={{
+        //     color: '#40a9ff',
+        //     cursor:'pointer'
+        //   }} onClick={this.makeChoice.bind(this,record.id)}>选课</span>
+        // )
+      ),
+    }
+    ];
+    /* course end */
 
     const getFieldDecorator = this.props.form.getFieldDecorator;
     const formItemStyle = {
@@ -462,7 +535,80 @@ class AdminPage extends Component{
                 <Table dataSource={teachers} columns={teachersColumn} />
               </div>
             </TabPane>
-            <TabPane tab="选课管理" key="3">
+            <TabPane tab="课程管理" key="3">
+              <div style={{
+                height:'calc(100vh - 66px)'
+              }}>
+                <div style={{
+                  height:'15%',
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  alignItems: 'center'
+                }}>
+                  <Form layout="inline">
+                    <FormItem style={formItemStyle}>
+                      {getFieldDecorator('teacher')(
+                        <Input placeholder="任课教师" />
+                      )}
+                    </FormItem>
+                    <FormItem style={formItemStyle}>
+                      {getFieldDecorator('subject')(
+                        <Input placeholder="学科类别" />
+                      )}
+                    </FormItem>
+                    <FormItem style={formItemStyle}>
+                      {getFieldDecorator('classNameForSearch')(
+                        <Input placeholder="课程名称" />
+                      )}
+                    </FormItem>
+                    <FormItem>
+                      <Button type="primary" onClick={()=>{
+                        this.props.form.validateFieldsAndScroll((err, values) => {
+                          if(!err) {
+                            let teacherCondition = values.teacher;
+                            let subjectCondition = values.subject;
+                            let classNameCondition = values.classNameForSearch;
+
+                            let classDataBack = PublicAuthKit.deepCopy(AdminStore.getCoursesBack);
+                            let flag = true;
+                            for(let i=0;i<classDataBack.length;i++){
+                              let item = classDataBack[i];
+                              if(teacherCondition!=null&&teacherCondition!==''){
+                                if(item.person.name.indexOf(teacherCondition)===-1){
+                                  flag = false;
+                                }
+                              }
+                              if(subjectCondition!=null&&subjectCondition!=='') {
+                                if(item.type.indexOf(subjectCondition)===-1){
+                                  flag = false;
+                                }
+                              }
+                              if(classNameCondition!=null&&classNameCondition!=='') {
+                                if(item.name.indexOf(classNameCondition)===-1){
+                                  flag = false;
+                                }
+                              }
+                              if(!flag){
+                                classDataBack.splice(i,1);
+                                i -= 1;
+                                flag = true;
+                              }
+                            }
+                            AdminStore.setCourses(classDataBack);
+                          }
+                        });
+                      }}>搜索</Button>
+                      <Button style={{marginLeft:5}} onClick={()=>{
+                        this.props.form.resetFields(['teacher','subject','classNameForSearch']);
+                        AdminStore.setCourses(AdminStore.getCoursesBack);
+                      }}>清空</Button>
+                    </FormItem>
+                  </Form>
+                </div>
+                <Table dataSource={courseArray} columns={courseColumn} />
+              </div>
+            </TabPane>
+            <TabPane tab="选课管理" key="4">
               <div style={{
                 height:'calc(100vh - 66px)'
               }}>

@@ -30,7 +30,7 @@ class CreateStudentModal extends Component{
                 let person = {
                   name:values.studentName,
                   number:values.studentNumber,
-                  email:values.email,
+                  email:values.studentEmail,
                   password:values.studentPassword,
                   introduction:values.studentIntroduction,
                   type:'student'
@@ -62,18 +62,18 @@ class CreateStudentModal extends Component{
               label="学号"
               hasFeedback>
               {getFieldDecorator('studentNumber', {
-                rules: [{ required: true, message: '请输入密码！'}],
+                rules: [{ required: true, message: '请输入学号！'}],
               })(
-                <Input placeholder="请输入密码"/>
+                <Input placeholder="请输入学号"/>
               )}
             </FormItem>
             <FormItem
               label="密码"
               hasFeedback>
               {getFieldDecorator('studentPassword', {
-                rules: [{ required: true, message: '请输入学号！'}],
+                rules: [{ required: true, message: '请输入密码！'}],
               })(
-                <Input placeholder="请输入学号"/>
+                <Input placeholder="请输入密码"/>
               )}
             </FormItem>
             <FormItem

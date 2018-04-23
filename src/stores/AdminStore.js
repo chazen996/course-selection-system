@@ -29,10 +29,25 @@ class AdminStore{
   @observable choiceNumber = 0;
 
   @observable courses = [];
+  @observable coursesBack = [];
+
+  @observable targetCourse= {
+    person:{
+
+    }
+  };
 
   @observable showCreateStudentModal = false;
 
   @observable showCreateTeacherModal = false;
+
+  @computed get getTargetCourse(){
+    return this.targetCourse;
+  }
+
+  @computed get getCoursesBack(){
+    return this.coursesBack;
+  }
 
   @computed get getShowCreateTeacherModal(){
     return this.showCreateTeacherModal;
@@ -92,6 +107,14 @@ class AdminStore{
 
   @computed get getStudents(){
     return this.students;
+  }
+
+  @action setTargetCourse(course){
+    this.targetCourse = course;
+  }
+
+  @action setCourseBack(courses){
+    this.coursesBack = courses;
   }
 
   @action setShowCreateTeacherModal(status){
@@ -167,6 +190,7 @@ class AdminStore{
         this.setChoicesBack(choices.data);
 
         this.setCourses(courses.data);
+        this.setCourseBack(courses.data);
 
         this.setStudentNumber(students.data.length);
         this.setTeacherNumber(teachers.data.length);
@@ -233,6 +257,18 @@ class AdminStore{
 
   addPerson(student){
     return axios.post(`/person`,JSON.stringify(student)).catch(err=>{
+      console.log(err);
+    });
+  }
+
+  updateCourse(course){
+    return axios.put(`/course`,JSON.stringify(course)).catch(err=>{
+      console.log(err);
+    });
+  }
+
+  deleteCourse(courseId){
+    return axios.delete(`/course/${courseId}`).catch(err=>{
       console.log(err);
     });
   }

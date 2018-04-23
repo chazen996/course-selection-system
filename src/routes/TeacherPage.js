@@ -128,7 +128,7 @@ class TeacherPage extends Component{
               {getFieldDecorator('className', {
                 initialValue:targetClass.name,
               })(
-                <Input placeholder="请输入自定义类型名称" disabled/>
+                <Input placeholder="请输入课程名称" disabled/>
               )}
             </FormItem>
             <FormItem
@@ -136,7 +136,7 @@ class TeacherPage extends Component{
               {getFieldDecorator('teacherName', {
                 initialValue:targetClass.person.name,
               })(
-                <Input placeholder="请输入自定义类型名称" disabled/>
+                <Input placeholder="请输入教师名称" disabled/>
               )}
             </FormItem>
             <FormItem
