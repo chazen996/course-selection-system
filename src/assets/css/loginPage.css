@@ -1,0 +1,21 @@
+@import "global.css";
+.login-form {
+  width: 357px;
+  margin: 0 auto;
+}
+.login-form-button {
+  width: 100%;
+}
+.register-form-button {
+  width: 100%;
+}
+.login-form-forgot {
+  float: right;
+}
+
+.login-page{
+  margin: 0 auto;
+  width: 479px;
+  height: 300px;
+}
+
